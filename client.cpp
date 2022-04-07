@@ -6,7 +6,10 @@
 #include <queue>
 #include <mutex>
 #include <stdlib.h>
+#include <thread>
+#include <chrono>
 
+const uint signalDelayInMs = 5;
 
 TCPClient tcp;
 
@@ -19,6 +22,18 @@ void sig_exit(int s)
 const std::string defaultClientId = "Defauld client ID";
 std::queue <int> simulatedData;
 std::mutex mtx;
+
+void pushRandomData(std::queue <int> &container, int delayInMs = 100)
+{
+	srand (time(nullptr));
+	while (true)
+	{
+		mtx.lock();
+		container.push( rand() % 1000 );
+		mtx.unlock();
+		this_thread::sleep_for( chrono::milliseconds(delayInMs) );
+	}
+}
 
 string prepareMessageToServer(std::queue <int> &data, std::string const &clientId)
 {
@@ -42,28 +57,42 @@ int main(int argc, char *argv[])
 	}
 	signal(SIGINT, sig_exit);
 
+	/** run simulation in separate thread **/
+	std::thread (pushRandomData, std::ref(simulatedData), signalDelayInMs).detach();
+
 	uint sendDataCounter = 0;
 	uint recivedDataCounter = 0;
 
 	const std::string clientId = (argc == 4) ? argv[3] : defaultClientId;
 	bool tcpOk = tcp.setup(argv[1],atoi(argv[2]));
 	cout << "Connection to server: " << ( (tcpOk) ? "OK" : "not OK" ) << endl;
-	cout << "Query data" << '\t' << "Sent data" << '\t' << "Recived data" << endl;
-	while(tcpOk)
-	{
-		/** wait data from buffer **/
-		while (simulatedData.empty()) sleep(1);
 
-		tcp.Send( prepareMessageToServer(simulatedData, clientId) );
-		sendDataCounter++;
-		string rec = tcp.receive();
-		if( rec != "" )
-		{
-			cout << rec << endl;
-			recivedDataCounter++;
+	/** sens data thread **/
+	std::thread ([&]()
+	{
+		while(tcpOk) {
+			/** wait data from buffer **/
+			while (simulatedData.empty()) this_thread::sleep_for( chrono::milliseconds( 500 ) );
+
+			tcp.Send( prepareMessageToServer(simulatedData, clientId) );
+			sendDataCounter++;
 		}
-		
-		cout << simulatedData.size() << '\t' << sendDataCounter << '\t' << recivedDataCounter << endl;
+	}).detach();
+
+	/** receive data thread **/
+	std::thread ([&]()
+	{
+		while(tcpOk) {
+			string rec = tcp.receive();
+			if( rec != "" ) recivedDataCounter++;
+		}
+	}).detach();
+
+	/** data status info **/
+	if (tcpOk) cout << "Client_Id \t Query data \t Sent data \t Recived data" << endl;
+	while(tcpOk) {	
+		cout << clientId << "\t\t" << simulatedData.size() << "\t\t" << sendDataCounter << "\t\t" << recivedDataCounter << endl;
+		this_thread::sleep_for( chrono::seconds(1));
 	}
 	return 0;
 }

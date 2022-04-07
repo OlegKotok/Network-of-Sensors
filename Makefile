@@ -5,3 +5,4 @@ client:
 
 clean:
 	rm client
+	rm nohup.out

@@ -8,3 +8,10 @@
 
 8:38 07.04.2022 Working with client
 
+
+10:39 07.04.2022 Break
+
+13:15 07.04.2022 Finishing client application. Break for few hours. Researching the possibility to build a server in Node.Js (good choice for big heap of connections).
+TBD: server in c++
+TBD: server in NodeJs if possible
+TBD: make docker script

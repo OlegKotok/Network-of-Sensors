@@ -5,7 +5,7 @@ clientThreads=()
 
 if [ -z "$1" ]
 then
-	echo "No parameters found! Usage syntax: $0 count_of_clients ip"
+	echo "No parameters found! Usage syntax: $0 count_of_clients"
 	exit
 fi
 
@@ -13,10 +13,10 @@ echo "running $1 client with server $ip on port $port"
 
 for (( i=1; i <= $1; i++ ))
 do
-	nohup ./client $ip $port "Message from client #$i" &
+	nohup ./client $ip $port "Client$i" &
 	echo "Client $i was running: $!"
 	clientThreads+=($!)
-	sleep 1s
+	sleep 0.1s
 done
 
 echo "Clients threads: ${clientThreads[@]}"
