@@ -13,7 +13,7 @@ echo "running $1 client with server $ip on port $port"
 
 for (( i=1; i <= $1; i++ ))
 do
-	nohup ./network/example-client/client $ip $port "Message from client #$i" &
+	nohup ./client $ip $port "Message from client #$i" &
 	echo "Client $i was running: $!"
 	clientThreads+=($!)
 	sleep 1s
