@@ -3,3 +3,5 @@
 15:10 06.04.2022 Start of progress
 
 15:12 06.04.2022 Investigation
+
+19:58 06.04.2022 Investigation complete. Was writing test script to simulate multiple "sensors" (high load test) on one PC.
