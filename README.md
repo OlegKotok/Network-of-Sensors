@@ -27,7 +27,15 @@ All libraries are allowed.
 
 5 hours
 
+## Solution
 
+Microservice architecture.
+
+![Application Architecture](./solution.png?raw=true)
+
+Each client is written in native C++, which allows to run it on a set of embedded sensor devices with limited resources, like Raspberry Pi - the real physical device. Connection to the server via tcp-sockets. The server is realized on NodeJs, which allows good performance for multiple one-time connections, stability, and scalability.
+
+An application available web interface, that would allow the user to get stat of connections and listen to the incoming data. Real-time logs and graphical visualizations can be implemented on Android/iOS or Qt Desktop applications using WebSockets, which allows two-way communication and good performance for real-time applications with low latency. TBD.
 
 
 
