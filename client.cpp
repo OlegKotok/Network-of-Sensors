@@ -9,7 +9,7 @@
 #include <thread>
 #include <chrono>
 
-const uint signalDelayInMs = 5;
+const uint signalDelayInMs = 5000;
 
 TCPClient tcp;
 
@@ -40,7 +40,11 @@ string prepareMessageToServer(std::queue <int> &data, std::string const &clientI
 	time_t now;
 	time(&now);
 
-	std::string m = ctime(&now) + ',' + clientId + ",\"" + std::to_string( data.front() ) + "\"\n";
+	std::string m = "{\n \
+    { \"Client: \""    +    clientId    					+  "\"}, \
+    { \"Data: \""      +    std::to_string( data.front() )	+  "\"}, \
+    { \"Timestamp: \""	+    ctime(&now) 					+  "\"}\n}";
+	m[m.size()-5] = ' '; //replace \n in timestamp
 
 	mtx.lock();
 	data.pop();
@@ -85,13 +89,14 @@ int main(int argc, char *argv[])
 		while(tcpOk) {
 			string rec = tcp.receive();
 			if( rec != "" ) recivedDataCounter++;
+			if( rec != "" ) cout << "Recive: " << rec << endl;
 		}
 	}).detach();
 
 	/** data status info **/
 	if (tcpOk) cout << "Client_Id \t Query data \t Sent data \t Recived data" << endl;
 	while(tcpOk) {	
-		cout << clientId << "\t\t" << simulatedData.size() << "\t\t" << sendDataCounter << "\t\t" << recivedDataCounter << endl;
+		//cout << clientId << "\t\t" << simulatedData.size() << "\t\t" << sendDataCounter << "\t\t" << recivedDataCounter << endl;
 		this_thread::sleep_for( chrono::seconds(1));
 	}
 	return 0;

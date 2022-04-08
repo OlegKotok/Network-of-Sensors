@@ -1,17 +1,30 @@
 .LOG
 
-15:10 06.04.2022 Start of progress
+15:10 06.04.2022
+Start of progress
 
-15:12 06.04.2022 Investigation
+15:12 06.04.2022
+Investigation
 
-19:58 06.04.2022 Investigation complete. Was writing test script to simulate multiple "sensors" (high load test) on one PC.
+19:58 06.04.2022
+Investigation complete. Was writing test script to simulate multiple "sensors" (high load test) on one PC.
 
 8:38 07.04.2022 Working with client
 
 
 10:39 07.04.2022 Break
 
-13:15 07.04.2022 Finishing client application. Break for few hours. Researching the possibility to build a server in Node.Js (good choice for big heap of connections).
+13:15 07.04.2022
+Finishing client application. Break for few hours. Researching the possibility to build a server in Node.Js (good choice for big heap of connections).
 TBD: server in c++
 TBD: server in NodeJs if possible
 TBD: make docker script
+
+18:03 07.04.2022
+Start investigating on NodeJs server solution
+
+20:02 07.04.2022
+NodeJs investigation done. Result positive.
+
+9:59 08.04.2022
+Statr working with server. Mooving communication to JSON format.
