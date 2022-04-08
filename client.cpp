@@ -9,7 +9,7 @@
 #include <thread>
 #include <chrono>
 
-const uint signalDelayInMs = 5000;
+const uint signalDelayInMilliseconds = 500;
 
 TCPClient tcp;
 
@@ -29,7 +29,7 @@ void pushRandomData(std::queue <int> &container, int delayInMs = 100)
 	while (true)
 	{
 		mtx.lock();
-		container.push( rand() % 1000 );
+		container.push( rand() % 2000000 - 1000000 );
 		mtx.unlock();
 		this_thread::sleep_for( chrono::milliseconds(delayInMs) );
 	}
@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
 	signal(SIGINT, sig_exit);
 
 	/** run simulation in separate thread **/
-	std::thread (pushRandomData, std::ref(simulatedData), signalDelayInMs).detach();
+	std::thread (pushRandomData, std::ref(simulatedData), signalDelayInMilliseconds).detach();
 
 	uint sendDataCounter = 0;
 	uint recivedDataCounter = 0;
@@ -89,14 +89,14 @@ int main(int argc, char *argv[])
 		while(tcpOk) {
 			string rec = tcp.receive();
 			if( rec != "" ) recivedDataCounter++;
-			if( rec != "" ) cout << "Recive: " << rec << endl;
+			//if( rec != "" ) cout << "Recive: " << rec << endl;
 		}
 	}).detach();
 
 	/** data status info **/
 	if (tcpOk) cout << "Client_Id \t Query data \t Sent data \t Recived data" << endl;
 	while(tcpOk) {	
-		//cout << clientId << "\t\t" << simulatedData.size() << "\t\t" << sendDataCounter << "\t\t" << recivedDataCounter << endl;
+		cout << clientId << "\t\t" << simulatedData.size() << "\t\t" << sendDataCounter << "\t\t" << recivedDataCounter << endl;
 		this_thread::sleep_for( chrono::seconds(1));
 	}
 	return 0;
