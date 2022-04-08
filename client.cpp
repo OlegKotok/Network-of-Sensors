@@ -9,7 +9,9 @@
 #include <thread>
 #include <chrono>
 
+const uint sendDataLimit = 1000;
 const uint signalDelayInMilliseconds = 500;
+const uint refreshTimeSeconds = 60;
 
 TCPClient tcp;
 
@@ -80,6 +82,7 @@ int main(int argc, char *argv[])
 
 			tcp.Send( prepareMessageToServer(simulatedData, clientId) );
 			sendDataCounter++;
+			if (sendDataCounter >= sendDataLimit) tcpOk = false; //stop data transfer
 		}
 	}).detach();
 
@@ -95,9 +98,12 @@ int main(int argc, char *argv[])
 
 	/** data status info **/
 	if (tcpOk) cout << "Client_Id \t Query data \t Sent data \t Recived data" << endl;
-	while(tcpOk) {	
+	while(tcpOk) {
+		this_thread::sleep_for( chrono::seconds(refreshTimeSeconds));	
 		cout << clientId << "\t\t" << simulatedData.size() << "\t\t" << sendDataCounter << "\t\t" << recivedDataCounter << endl;
-		this_thread::sleep_for( chrono::seconds(1));
 	}
+	cout << endl << clientId << endl;
+	cout <<"SENT DATA: " << sendDataCounter << endl;
+	cout <<"RECIVED DATA: " << recivedDataCounter << endl;
 	return 0;
 }
