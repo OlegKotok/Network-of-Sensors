@@ -22,31 +22,33 @@ void sig_exit(int s)
 }
 
 const std::string defaultClientId = "Defauld client ID";
-std::queue <int> simulatedData;
+std::queue <string> simulatedData;
 std::mutex mtx;
 
-void pushRandomData(std::queue <int> &container, int delayInMs = 100)
+void pushRandomData(std::queue <string> &container, int delayInMs = 100)
 {
 	srand (time(nullptr));
+	static uint64_t counter = 1;
 	while (true)
 	{
+		string m = std::to_string(counter++) + '-' + std::to_string(rand() % 2000000 - 1000000);
 		mtx.lock();
-		container.push( rand() % 2000000 - 1000000 );
+		container.push(m);
 		mtx.unlock();
 		this_thread::sleep_for( chrono::milliseconds(delayInMs) );
 	}
 }
 
-string prepareMessageToServer(std::queue <int> &data, std::string const &clientId)
+string prepareMessageToServer(std::queue <string> &data, std::string const &clientId)
 {
 	time_t now;
 	time(&now);
 
 	std::string m = "{\n \
-    { \"Client: \""    +    clientId    					+  "\"}, \
-    { \"Data: \""      +    std::to_string( data.front() )	+  "\"}, \
-    { \"Timestamp: \""	+    ctime(&now) 					+  "\"}\n}";
-	m[m.size()-5] = ' '; //replace \n in timestamp
+    \"Client\": \""    +    clientId    	+  "\", \
+    \"Data\": \""      +    data.front()	+  "\", \
+    \"Timestamp\": \""	+   ctime(&now)		+  "\"\n}";
+	m[m.size()-4] = ' '; //replace \n in timestamp
 
 	mtx.lock();
 	data.pop();
