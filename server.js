@@ -27,4 +27,26 @@ net.createServer(function(sock) {
 
 }).listen(PORT, HOST);
 
-console.log('Server listening on ' + HOST +':'+ PORT);
+console.log('Sensor server listening on ' + HOST +':'+ PORT);
+
+
+
+// Web server
+const express = require('express')
+var http = require('http')
+const app = express()
+const port = 3000
+// Start the server with http
+http.createServer((req, res) => {
+    console.log("New web request " + req.url);
+    
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'text/plain');
+    res.end('Hello World');
+}).listen(port, () => {
+    console.log(`Web server listening at http://localhost:${port}`)
+  })
+
+  app.get('/', (req, res) => {
+    res.send('Hello World!')
+  })
