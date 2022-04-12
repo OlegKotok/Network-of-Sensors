@@ -12,6 +12,7 @@
 const uint sendDataLimit = 1000;
 const uint signalDelayInMilliseconds = 500;
 const uint refreshTimeSeconds = 60;
+const uint sendDataDelayInMilliseconds = 100;
 
 TCPClient tcp;
 
@@ -85,6 +86,7 @@ int main(int argc, char *argv[])
 			tcp.Send( prepareMessageToServer(simulatedData, clientId) );
 			sendDataCounter++;
 			if (sendDataCounter >= sendDataLimit) tcpOk = false; //stop data transfer
+			this_thread::sleep_for( chrono::milliseconds( sendDataDelayInMilliseconds ) );
 		}
 	}).detach();
 
