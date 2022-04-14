@@ -1,12 +1,24 @@
 #!/bin/bash
-ip="127.0.0.1"
+ip=$(tail -1 /etc/resolv.conf | cut -d' ' -f2)
 port=5050
+if [ -z "$ip" ]; then
+	ip="127.0.0.1"
+fi
 clientThreads=()
 
 if [ -z "$1" ]
 then
-	echo "No parameters found! Usage syntax: $0 count_of_clients"
+	echo "No parameters found!"
+	echo "Usage syntax: $ $0 N [server-ip] [port]"
 	exit
+fi
+
+if [ -n "$2" ]; then
+	ip=$2
+fi
+
+if [ -n "$3" ]; then
+	port=$3
 fi
 
 echo "running $1 client with server $ip on port $port"
