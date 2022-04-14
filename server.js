@@ -1,7 +1,6 @@
 /*********************** device server *********************** */
 var net = require('net');
 
-var HOST = '127.0.0.1';
 var PORT = 5050;
 var dataCounter = 0;
 const maxMessageInStoragePerClient = 100;
@@ -62,9 +61,9 @@ net.createServer(function(sock) {
         currentConnections--;
     });
 
-}).listen(PORT, HOST);
-
-console.log('Sensor server listening on ' + HOST +':'+ PORT);
+}).listen(PORT, () => {
+    console.log('Device server listening on port ' + PORT);
+});
 /*********************** device server *********************** */
 
 
@@ -102,11 +101,9 @@ http.createServer(app).listen(port, () => {
   })
 
   app.get('/sensors/:id', (req, res) => {
-    if (dataStorage.has(req.params.id))
-    {
-        res.send(dataStorage.get(req.params.id).messages);
-    } else {
-        res.send("record not found");    
+    if (!dataStorage.has(req.params.id)) {
+        res.send("record not found");
     }
+    res.send(dataStorage.get(req.params.id).messages);
   })
   /*********************** WEB server *********************** */
