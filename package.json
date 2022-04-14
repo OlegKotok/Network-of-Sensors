@@ -1,0 +1,29 @@
+{
+  "name": "network-of-sensors",
+  "version": "1.0.0",
+  "description": "Server for Network of Sensors solution. TCP server for sensors network and Web server based on express",
+  "main": "server.js",
+  "dependencies": {
+    "express": "^4.17.3",
+    "socket.io": "^4.4.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OlegKotok/Network-of-Sensors.git"
+  },
+  "keywords": [
+    "c++",
+    "tcp"
+  ],
+  "author": "Oleg Kotok",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/OlegKotok/Network-of-Sensors/issues"
+  },
+  "homepage": "https://github.com/OlegKotok/Network-of-Sensors#readme"
+}
