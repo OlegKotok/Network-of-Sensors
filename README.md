@@ -37,5 +37,39 @@ Each client is written in native C++, which allows to run it on a set of embedde
 
 An application available web interface, that would allow the user to get stat of connections and listen to the incoming data. Real-time logs and graphical visualizations can be implemented on Android/iOS or Qt Desktop applications using WebSockets, which allows two-way communication and good performance for real-time applications with low latency. TBD.
 
+## How to use
 
+1. Clone repository. Init and update submodules in repository.
 
+ > git clone https://github.com/OlegKotok/Network-of-Sensors.git
+ > cd Network-of-Sensors
+ > git submodule init
+ > git submodule update
+
+2. [Install](https://docs.docker.com/get-started/#download-and-install-docker) docker.
+
+3. Build docker-image and Run server.
+
+ > docker build -t device-server ./server
+ > docker run --rm -p 80:3000 -p 50:5050 --name device-server device-server
+
+ Where are 80 an external web-port, 50 - port for simulated sensor devices and ./server - path to "server" folder.
+
+4. Check device-server working correctly.
+
+ > curl localhost
+   Or open [localhost] (http://localhost) page in your browser.
+
+5. Run sensor-device multiple connections simulation.
+
+ > cd Network-of-Sensors/client
+ > make
+ > chmod a+x ./run_multiple_clients.sh
+ > chmod a+x ./run_multiple_clients.sh 100 "" 50
+
+ Where are 100 - number of simulated devices. "" 50 - ip address and port of device-server.
+
+ 6. Test functionality in your [browser](http://localhost). When done, write
+
+ > docker stop device-server
+ > docker image rm device-server
