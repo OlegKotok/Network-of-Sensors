@@ -77,3 +77,7 @@ chmod a+x ./run_multiple_clients.sh
 docker stop device-server
 docker image rm device-server
 ```
+
+---
+
+![Application in use](./scr.png?raw=true)
