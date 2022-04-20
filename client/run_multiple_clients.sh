@@ -2,7 +2,7 @@
 ip=$(tail -1 /etc/resolv.conf | cut -d' ' -f2)
 port=5050
 if [ -z "$ip" ]; then
-	ip="127.0.0.1"
+	ip=$(ip -4 route show default | cut -d" " -f3)
 fi
 clientThreads=()
 

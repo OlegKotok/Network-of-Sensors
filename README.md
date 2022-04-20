@@ -63,6 +63,12 @@ docker run --rm -p 80:3000 -p 50:5050 --name device-server device-server
 4. Run sensor-device multiple connections simulation.
 
  ```console 
+ docker build -t sensor-devices ./client
+ docker run --rm --name clients sensor-devices
+ ```
+ or
+
+ ```console 
 cd Network-of-Sensors/client
 make all
 chmod a+x ./run_multiple_clients.sh
@@ -71,11 +77,11 @@ chmod a+x ./run_multiple_clients.sh
 
  Where is 100 - number of simulated devices. "" 50 - ip address and port of device-server.
 
- 5. Test functionality in your [browser](http://localhost). When done, use the next syntax to stop the server and remove docker image.
+ 5. Test functionality in your [browser](http://localhost). When done, use the next syntax to stop the client & server and remove docker images.
 
-```console 
-docker stop device-server
-docker image rm device-server
+```console
+docker stop clients device-server
+docker image rm device-server sensor-devices
 ```
 
 ---
